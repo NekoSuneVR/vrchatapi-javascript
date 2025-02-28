@@ -10455,8 +10455,9 @@ export class PrintsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AuthenticationApi
      */
-    public getPrintData(printid?: string, options?: AxiosRequestConfig) {
-        return PrintsApiFp(this.configuration).getPrintData(printid, options).then((request) => request(this.axios, this.basePath));
+    public async getPrintData(printid?: string, options?: AxiosRequestConfig) {
+        const request = await PrintsApiFp(this.configuration).getPrintData(printid, options);
+        return request(this.axios, this.basePath);
     }
 }
 
