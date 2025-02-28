@@ -9186,14 +9186,14 @@ export interface User {
 export interface UserExists {
     /**
      * Status if a user exist with that username or userId.
-     * @type {boolean}
+UserExists     * @type {boolean}
      * @memberof UserExists
      */
     'userExists': boolean;
     /**
      * Is the username valid?
      * @type {boolean}
-     * @memberof UserExists
+     * @memberof 
      */
     'nameOk'?: boolean;
 }
@@ -9239,6 +9239,64 @@ export interface UserNote {
      * @memberof UserNote
      */
     'userId': string;
+}
+/**
+ * 
+ * @export
+ * @interface PrintsData
+ */
+export interface PrintsData {
+    /**
+     * 
+     * @type {string}
+     * @memberof PrintsData
+     */
+    'authorId': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PrintsData
+     */
+    'authorName': string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PrintsData
+     */
+    'createdAt': string;
+    /**
+     * Additional note or comment
+     * @type {string}
+     * @memberof PrintsData
+     */
+    'note'?: string;
+    /**
+     * Associated world ID
+     * @type {string}
+     * @memberof PrintsData
+     */
+    'worldId': string;
+    /**
+     * Associated world name
+     * @type {string}
+     * @memberof PrintsData
+     */
+    'worldName': string;
+    /**
+     * Timestamp of the entry
+     * @type {string}
+     * @memberof PrintsData
+     */
+    'timestamp': string;
+    /**
+     * Object containing file details
+     * @type {object}
+     * @memberof PrintsData
+     */
+    'files'?: {
+        fileId: string;
+        image: string;
+    };
 }
 /**
  * 
@@ -10298,6 +10356,109 @@ export class AuthenticationApi extends BaseAPI {
     }
 }
 
+/**
+ * PrintsApi - axios parameter creator
+ * @export
+ */
+export const PrintsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Gets Prints Data
+         * @summary Gets Prints Data
+         * @param {string} [printid] Print ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPrintData: async (printid?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'avatarId' is not null or undefined
+            assertParamExists('getPrintData', 'printid', printid)
+            const localVarPath = `/prints/{printid}`
+                .replace(`{${"printid"}}`, encodeURIComponent(String(printid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication authCookie required
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AuthenticationApi - functional programming interface
+ * @export
+ */
+export const PrintsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = PrintsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Gets Prints Data
+         * @summary Gets Prints Data
+         * @param {string} [printid] Print ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getPrintData(printid?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PrintsData>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPrintData(printid, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * PrintsApi - factory interface
+ * @export
+ */
+export const PrintsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = PrintsApiFp(configuration)
+    return {
+        /**
+         * Gets Prints Data
+         * @summary Gets Prints Data
+         * @param {string} [printid] Print ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPrintData(printid?: string, options?: any): AxiosPromise<UserExists> {
+            return localVarFp.getPrintData(printid, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * PrintsApi - object-oriented interface
+ * @export
+ * @class PrintsApi
+ * @extends {BaseAPI}
+ */
+export class PrintsApi extends BaseAPI {
+    /**
+     * Gets Prints Data
+     * @summary Gets Prints Data
+     * @param {string} [printid] Print ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationApi
+     */
+    public getPrintData(printid?: string, options?: AxiosRequestConfig) {
+        return PrintsApiFp(this.configuration).getPrintData(printid, options).then((request) => request(this.axios, this.basePath));
+    }
+}
 
 /**
  * AvatarsApi - axios parameter creator
