@@ -10434,7 +10434,7 @@ export const PrintsApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getPrintData(printid?: string, options?: any): AxiosPromise<UserExists> {
+        getPrintData(printid?: string, options?: any): AxiosPromise<PrintsData> {
             return localVarFp.getPrintData(printid, options).then((request) => request(axios, basePath));
         },
     };
